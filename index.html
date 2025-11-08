@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Linkist - All your favourite links in one place</title>
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
       rel="stylesheet"
@@ -314,6 +315,10 @@
         text-align: left;
         font-size: 16px;
       }
+    img {
+      width: 3.5rem;
+      height: 3.5rem;
+      }
 
       .category-button:hover {
         background: rgba(255, 255, 255, 0.03);
@@ -518,10 +523,8 @@
     <div class="bg-blob blob-2"></div>
 
     <!-- Header -->
-    <header>
-      <a class="logo" onclick="showPage('home'), document.title = `Linkist`"
-        >Linkist</a
-      >
+    <header class="logo"  onclick="showPage('home'), document.title = `Linkist`">
+      <img id="image" src="/images/logo.png"><h2>&nbsp&nbspLinkist<h2></img>
     </header>
 
     <!-- Home Page -->
@@ -534,7 +537,7 @@
         </p>
         <button
           class="cta-button"
-          onclick="showPage('listings'), document.title = `Public Listings`"
+          onclick="showPage('listings'), document.title = `Public Listings` "
         >
           View Public Listings
           <svg
