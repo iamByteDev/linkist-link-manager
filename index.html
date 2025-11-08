@@ -3,11 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Linkist - All your favourite links, all in one place</title>
+    <title>Linkist</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
       rel="stylesheet"
     />
+    <script>
+      let title = "Linkist - All your favourite links, all in one place";
+    </script>
     <style>
       * {
         margin: 0;
@@ -516,7 +519,9 @@
 
     <!-- Header -->
     <header>
-      <a class="logo" onclick="showPage('home')">Linkist</a>
+      <a class="logo" onclick="showPage('home'), document.title = `Linkist`"
+        >Linkist</a
+      >
     </header>
 
     <!-- Home Page -->
@@ -527,7 +532,10 @@
           Streamline your digital presence. Curate, organize, and share your
           most important links with elegance.
         </p>
-        <button class="cta-button" onclick="showPage('listings')">
+        <button
+          class="cta-button"
+          onclick="showPage('listings'), document.title = `Public Listings`"
+        >
           View Public Listings
           <svg
             width="20"
@@ -587,7 +595,10 @@
             <!-- Categories will be generated here -->
           </div>
           <div id="links-view" style="display: none">
-            <button class="back-button" onclick="showCategoriesView()">
+            <button
+              class="back-button"
+              onclick="showCategoriesView(), document.title = `Public Listings`"
+            >
               ← Back
             </button>
             <h1 id="category-title" style="margin-bottom: 32px"></h1>
@@ -622,60 +633,38 @@
       // Data
       const linkStacks = [
         {
-          category: "Development",
+          category: "HKUGAC",
           links: [
-            { id: 1, title: "GitHub", url: "https://github.com" },
-            { id: 2, title: "GitLab", url: "https://gitlab.com" },
-            { id: 3, title: "Bitbucket", url: "https://bitbucket.org" },
-          ],
-        },
-        {
-          category: "Deployment",
-          links: [
-            { id: 4, title: "Vercel", url: "https://vercel.com" },
-            { id: 5, title: "Netlify", url: "https://netlify.com" },
-            { id: 6, title: "Railway", url: "https://railway.app" },
-          ],
-        },
-        {
-          category: "Framework",
-          links: [
-            { id: 7, title: "Next.js", url: "https://nextjs.org" },
-            { id: 8, title: "React", url: "https://react.dev" },
-            { id: 9, title: "Vue.js", url: "https://vuejs.org" },
-            { id: 10, title: "Svelte", url: "https://svelte.dev" },
-          ],
-        },
-        {
-          category: "Styling & Design",
-          links: [
-            { id: 11, title: "Tailwind CSS", url: "https://tailwindcss.com" },
-            { id: 12, title: "Shadcn/ui", url: "https://ui.shadcn.com" },
-            { id: 13, title: "Figma", url: "https://figma.com" },
-          ],
-        },
-        {
-          category: "AI & Tools",
-          links: [
-            { id: 14, title: "v0", url: "https://v0.app" },
-            { id: 15, title: "ChatGPT", url: "https://chatgpt.com" },
-            { id: 16, title: "Claude", url: "https://claude.ai" },
-          ],
-        },
-        {
-          category: "Learning",
-          links: [
+            { id: 1, title: "Main website", url: "https://github.com" },
+            { id: 2, title: "Library OPAC", url: "https://gitlab.com" },
+            { id: 3, title: "Newsela", url: "https://bitbucket.org" },
             {
-              id: 17,
-              title: "MDN Web Docs",
-              url: "https://developer.mozilla.org",
+              id: 4,
+              title: "Britannica,",
+              url: "https://school.eb.com.au/levels",
             },
             {
-              id: 18,
-              title: "TypeScript",
-              url: "https://www.typescriptlang.org",
+              id: 5,
+              title: "Hong Kong Public Library",
+              url: "https://mmis.hkpl.gov.hk/",
             },
-            { id: 19, title: "Web.dev", url: "https://web.dev" },
+            { id: 6, title: "HyRead", url: "https://hkugac.hyread.hk/" },
+            {
+              id: 6,
+              title: "eClass",
+              url: "https://eclass.hkugac.edu.hk/home/index.php",
+            },
+            {
+              id: 7,
+              title: "Daily Bulletin",
+              url: "https://sites.google.com/hkugac.edu.hk/dailybulletin/%E9%A6%96%E9%A0%81",
+            },
+            {
+              id: 8,
+              title: "UGA Revision",
+              url: "https://ugarev.netlify.app/",
+            },
+            { id: 9, title: "Noteflight", url: "https://www.noteflight.com/" },
           ],
         },
       ];
@@ -772,10 +761,10 @@
 
       function showCategoriesView() {
         const linksView = document.getElementById("links-view");
-        linksView.classList.add("blur-in");
+        linksView.classList.add("blur-out");
 
         setTimeout(() => {
-          linksView.classList.remove("blur-in");
+          linksView.classList.remove("blur-out");
           linksView.style.display = "none";
           const categoriesView = document.getElementById("categories-view");
           categoriesView.style.display = "grid";
