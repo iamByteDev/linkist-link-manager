@@ -3,94 +3,806 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script defer src="/_vercel/insights/script.js"></script>
+    <title>Linkist - All your favourite links, all in one place</title>
     <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css"
     />
-    <title>Vercel HTML Starter</title>
-    <meta
-      name="description"
-      content="High-performance HTML based website template."
-    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        background: #000;
+        color: #fff;
+        font-family: "Inter", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        overflow: hidden;
+      }
+
+      /* Animations */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 0.05;
+        }
+        50% {
+          opacity: 0.1;
+        }
+      }
+
+      @keyframes blurOut {
+        0% {
+          opacity: 1;
+          filter: blur(0px);
+        }
+        100% {
+          opacity: 1;
+          filter: blur(8px);
+        }
+      }
+
+      @keyframes blurIn {
+        0% {
+          opacity: 1;
+          filter: blur(8px);
+        }
+        100% {
+          opacity: 1;
+          filter: blur(0px);
+        }
+      }
+
+      .animate-fade-in {
+        animation: fadeIn 0.6s ease-out forwards;
+      }
+
+      .animate-pulse {
+        animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+
+      .blur-out {
+        animation: blurOut 0.23s ease-out forwards;
+      }
+
+      .blur-in {
+        animation: blurIn 0.23s ease-out forwards;
+      }
+
+      /* Background gradient blobs */
+      .bg-blob {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(80px);
+        z-index: -1;
+      }
+
+      .blob-1 {
+        width: 384px;
+        height: 384px;
+        background: rgba(255, 255, 255, 0.05);
+        top: 25%;
+        left: 25%;
+        animation: pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+
+      .blob-2 {
+        width: 320px;
+        height: 320px;
+        background: rgba(255, 255, 255, 0.05);
+        bottom: 33%;
+        right: 25%;
+        animation: pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        animation-delay: 2s;
+      }
+
+      /* Navigation */
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        padding: 20px 32px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(10px);
+      }
+
+      .logo {
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 18px;
+        cursor: pointer;
+        transition: opacity 0.3s;
+      }
+
+      .logo:hover {
+        opacity: 0.7;
+      }
+
+      /* Main containers */
+      main {
+        width: 100%;
+      }
+
+      .page {
+        display: none;
+      }
+
+      .page.active {
+        display: flex;
+      }
+
+      /* Home page */
+      #home-page {
+        min-height: 100vh;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding-top: 64px;
+      }
+
+      .hero-section {
+        max-width: 56rem;
+        margin: 0 auto;
+        padding: 24px;
+        text-align: center;
+        animation: fadeIn 1s ease-out;
+      }
+
+      .hero-section h1 {
+        font-size: clamp(2.25rem, 7vw, 3.5rem);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+        margin-bottom: 32px;
+        text-wrap: balance;
+      }
+
+      .hero-section p {
+        font-size: 18px;
+        color: rgba(255, 255, 255, 0.7);
+        max-width: 42rem;
+        margin: 0 auto 24px;
+        line-height: 1.6;
+        text-wrap: pretty;
+      }
+
+      .cta-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 16px 32px;
+        background: #fff;
+        color: #000;
+        border: none;
+        border-radius: 9999px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        margin-top: 24px;
+      }
+
+      .cta-button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      }
+
+      /* Benefits Section */
+      .benefits-section {
+        padding: 96px 24px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        width: 100%;
+      }
+
+      .benefits-container {
+        max-width: 72rem;
+        margin: 0 auto;
+      }
+
+      .benefits-section h2 {
+        font-size: 36px;
+        font-weight: 700;
+        margin-bottom: 64px;
+        text-align: center;
+      }
+
+      .benefits-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 32px;
+      }
+
+      .benefit-card {
+        padding: 32px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        transition: all 0.3s;
+      }
+
+      .benefit-card:hover {
+        border-color: rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .benefit-emoji {
+        font-size: 32px;
+        margin-bottom: 16px;
+      }
+
+      .benefit-card h3 {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 12px;
+      }
+
+      .benefit-card p {
+        color: rgba(255, 255, 255, 0.7);
+        line-height: 1.6;
+        font-size: 14px;
+      }
+
+      /* Public Listings Page */
+      #listings-page {
+        flex-direction: column;
+        height: 100vh;
+      }
+
+      .listings-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 48px 24px;
+        padding-top: 100px;
+      }
+
+      .listings-container {
+        max-width: 80rem;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .listings-container h1 {
+        font-size: 48px;
+        font-weight: 300;
+        letter-spacing: -0.02em;
+        margin-bottom: 64px;
+        text-wrap: balance;
+        animation: fadeIn 1s ease-out;
+      }
+
+      .categories-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 16px;
+        margin-bottom: 64px;
+      }
+
+      .category-button {
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        padding: 24px;
+        background: transparent;
+        color: #fff;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-align: left;
+        font-size: 16px;
+      }
+
+      .category-button:hover {
+        background: rgba(255, 255, 255, 0.03);
+        border-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .category-title {
+        font-size: 18px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.9);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .category-count {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.5);
+        margin-top: 8px;
+      }
+
+      .links-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 16px;
+      }
+
+      .link-card {
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        padding: 24px;
+        background: transparent;
+        color: #fff;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+      }
+
+      .link-card:hover {
+        background: rgba(255, 255, 255, 0.03);
+        border-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .link-title {
+        font-size: 18px;
+        font-weight: 500;
+      }
+
+      .external-icon {
+        width: 16px;
+        height: 16px;
+        opacity: 0.3;
+        transition: opacity 0.2s;
+      }
+
+      .link-card:hover .external-icon {
+        opacity: 0.6;
+      }
+
+      .back-button {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.5);
+        background: none;
+        border: none;
+        cursor: pointer;
+        margin-bottom: 32px;
+        transition: color 0.2s;
+      }
+
+      .back-button:hover {
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      /* HKUGAC Page */
+      #hkugac-page {
+        padding: 128px 24px 48px;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      .hkugac-container {
+        max-width: 56rem;
+        width: 100%;
+        margin: 0 auto;
+      }
+
+      .hkugac-container h1 {
+        font-size: 40px;
+        font-weight: 700;
+        margin-bottom: 16px;
+        text-align: center;
+        animation: fadeIn 1s ease-out;
+      }
+
+      .hkugac-container p {
+        text-align: center;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 48px;
+      }
+
+      .hkugac-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 24px;
+        margin-bottom: 64px;
+      }
+
+      .hkugac-link {
+        display: block;
+        padding: 32px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        text-decoration: none;
+        color: #fff;
+        transition: all 0.3s;
+        cursor: pointer;
+      }
+
+      .hkugac-link:hover {
+        border-color: rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .hkugac-link h2 {
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 12px;
+        text-wrap: balance;
+      }
+
+      .hkugac-link p {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.5);
+        text-align: left;
+      }
+
+      .instructions {
+        padding: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .instructions h3 {
+        font-weight: 600;
+        margin-bottom: 12px;
+      }
+
+      .instructions p {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      code {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: "Courier New", monospace;
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      /* Footer */
+      footer {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 48px 24px;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.5);
+        width: 100%;
+      }
+
+      /* Responsiveness */
+      @media (max-width: 768px) {
+        .categories-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .links-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .hkugac-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .listings-container h1 {
+          font-size: 32px;
+          margin-bottom: 32px;
+        }
+      }
+    </style>
   </head>
   <body>
-    <h1>Vercel HTML Starter</h1>
-    <p>
-      This template is a simple, but powerful single
-      <code>index.html</code> file deployed to
-      <a href="https://vercel.com">Vercel</a>. When your site is deployed, all
-      static assets (like HTML, JavaScript, CSS, images, and more) are deployed
-      globally to every
-      <a href="https://vercel.com/docs/concepts/edge-network/overview"
-        >Vercel Edge Network</a
-      >
-      region.
-    </p>
-    <h2>Simple, privacy-friendly analytics</h2>
-    <p>
-      Want to understand your visitor traffic? Vercel Analytics gives you
-      first-party, privacy-friendly traffic analytics for your HTML site. This
-      template is already configured using the following script:
-    </p>
-    <pre><code>&lt;script defer src="/_vercel/insights/script.js"&gt;&lt;/script&gt;</code></pre>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/analytics">Vercel Analytics</a>.
-    </p>
-    <h2>Integrated with git</h2>
-    <p>
-      Deploying updates to your site is as simple as
-      <code>git push</code> thanks to Vercel's advanced
-      <a href="https://vercel.com/docs/concepts/git">Git Integration</a>.
-      Support for GitHub, GitLab, Bitbucket is zero-configuration, and with the
-      flexible Vercel CLI and API, you can integrate with any tool possible.
-    </p>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/docs/concepts/git">Git Integration</a>.
-    </p>
-    <h2>Fast <code>gzip</code> compression</h2>
-    <p>
-      To help ensure the smallest possible file sizes for your static assets,
-      the Vercel Edge Network compresses files by default using
-      <code>gzip</code>. You can also optionally use
-      <code>brotli</code> compressesion if you prefer.
-    </p>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/docs/concepts/edge-network/compression"
-        >compression</a
-      >.
-    </p>
-    <h2>Advanced routing configuration</h2>
-    <p>
-      Vercel gives you a variety of ways to configure the routing of your
-      website. For example, adding redirects, rewrites, or headers to your page.
-      While you can use <code>vercel.json</code> to define these through JSON,
-      you can also express your routing configuration as code using
-      <a href="https://vercel.com/docs/concepts/functions/edge-middleware"
-        >Vercel Edge Middleware</a
-      >.
-    </p>
-    <p>
-      Middleware runs before the
-      <a href="https://vercel.com/docs/concepts/edge-network/caching"
-        >Vercel Edge Network Cache</a
-      >, so you can configure routing exactly as your application needs. For
-      example, this template uses <code>middleware.js</code> defined in the root
-      of the repository to add additional security headers to the site:
-    </p>
-    <pre><code>referrer-policy: origin-when-cross-origin
-strict-transport-security: max-age=31536000; includeSubDomains; preload
-x-content-type-options: nosniff
-x-dns-prefetch-control: on
-x-frame-options: DENY</code></pre>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/docs/concepts/functions/edge-middleware"
-        >Vercel Edge Middleware</a
-      >.
-    </p>
+    <!-- Background blobs -->
+    <div class="bg-blob blob-1"></div>
+    <div class="bg-blob blob-2"></div>
+
+    <!-- Header -->
+    <header>
+      <a class="logo" onclick="showPage('home')">Linkist</a>
+    </header>
+
+    <!-- Home Page -->
+    <main id="home-page" class="page active">
+      <section class="hero-section">
+        <h1>All your favourite links,<br /><span>all in one place.</span></h1>
+        <p>
+          Streamline your digital presence. Curate, organize, and share your
+          most important links with elegance.
+        </p>
+        <button class="cta-button" onclick="showPage('listings')">
+          View Public Listings
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </button>
+      </section>
+
+      <section class="benefits-section">
+        <div class="benefits-container">
+          <h2>Why Linkist?</h2>
+          <div class="benefits-grid">
+            <div class="benefit-card">
+              <div class="benefit-emoji">📋</div>
+              <h3>Stay Organized</h3>
+              <p>
+                Keep all your important links in one beautiful, minimalist
+                place. No clutter, just simplicity.
+              </p>
+            </div>
+            <div class="benefit-card">
+              <div class="benefit-emoji">🚀</div>
+              <h3>Share Instantly</h3>
+              <p>
+                Share your curated link collections with the world. One link to
+                rule them all.
+              </p>
+            </div>
+            <div class="benefit-card">
+              <div class="benefit-emoji">🌐</div>
+              <h3>Always Accessible</h3>
+              <p>
+                Access your links anytime, anywhere. Built for the modern web.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <p>Linkist • Elevate Your Digital Presence</p>
+      </footer>
+    </main>
+
+    <!-- Public Listings Page -->
+    <main id="listings-page" class="page">
+      <div class="listings-content">
+        <div class="listings-container">
+          <h1>Link Collections</h1>
+          <div id="categories-view" class="categories-grid">
+            <!-- Categories will be generated here -->
+          </div>
+          <div id="links-view" style="display: none">
+            <button class="back-button" onclick="showCategoriesView()">
+              ← Back
+            </button>
+            <h1 id="category-title" style="margin-bottom: 32px"></h1>
+            <div class="links-grid" id="links-grid">
+              <!-- Links will be generated here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- HKUGAC Page -->
+    <main id="hkugac-page" class="page">
+      <div class="hkugac-container">
+        <h1>HKUGAC Directory</h1>
+        <p>All your HKUGAC links in one place</p>
+        <div class="hkugac-grid" id="hkugac-grid">
+          <!-- Links will be generated here -->
+        </div>
+        <div class="instructions">
+          <h3>How to add more links:</h3>
+          <p>
+            To add more links, duplicate any link object in the
+            <code>hkugacLinks</code> array and update the <code>name</code> and
+            <code>url</code> properties. Simple copy & paste!
+          </p>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      // Data
+      const linkStacks = [
+        {
+          category: "Development",
+          links: [
+            { id: 1, title: "GitHub", url: "https://github.com" },
+            { id: 2, title: "GitLab", url: "https://gitlab.com" },
+            { id: 3, title: "Bitbucket", url: "https://bitbucket.org" },
+          ],
+        },
+        {
+          category: "Deployment",
+          links: [
+            { id: 4, title: "Vercel", url: "https://vercel.com" },
+            { id: 5, title: "Netlify", url: "https://netlify.com" },
+            { id: 6, title: "Railway", url: "https://railway.app" },
+          ],
+        },
+        {
+          category: "Framework",
+          links: [
+            { id: 7, title: "Next.js", url: "https://nextjs.org" },
+            { id: 8, title: "React", url: "https://react.dev" },
+            { id: 9, title: "Vue.js", url: "https://vuejs.org" },
+            { id: 10, title: "Svelte", url: "https://svelte.dev" },
+          ],
+        },
+        {
+          category: "Styling & Design",
+          links: [
+            { id: 11, title: "Tailwind CSS", url: "https://tailwindcss.com" },
+            { id: 12, title: "Shadcn/ui", url: "https://ui.shadcn.com" },
+            { id: 13, title: "Figma", url: "https://figma.com" },
+          ],
+        },
+        {
+          category: "AI & Tools",
+          links: [
+            { id: 14, title: "v0", url: "https://v0.app" },
+            { id: 15, title: "ChatGPT", url: "https://chatgpt.com" },
+            { id: 16, title: "Claude", url: "https://claude.ai" },
+          ],
+        },
+        {
+          category: "Learning",
+          links: [
+            {
+              id: 17,
+              title: "MDN Web Docs",
+              url: "https://developer.mozilla.org",
+            },
+            {
+              id: 18,
+              title: "TypeScript",
+              url: "https://www.typescriptlang.org",
+            },
+            { id: 19, title: "Web.dev", url: "https://web.dev" },
+          ],
+        },
+      ];
+
+      const hkugacLinks = [
+        { id: 1, name: "HKUGAC Portal", url: "https://hkugac.org" },
+        { id: 2, name: "Events Calendar", url: "https://events.hkugac.org" },
+        { id: 3, name: "Member Directory", url: "https://members.hkugac.org" },
+        { id: 4, name: "Resources Hub", url: "https://resources.hkugac.org" },
+        { id: 5, name: "Contact Us", url: "https://contact.hkugac.org" },
+        { id: 6, name: "Documentation", url: "https://docs.hkugac.org" },
+      ];
+
+      // State
+      let currentCategory = null;
+
+      // Functions
+      function showPage(pageName) {
+        const currentPageElement = document.querySelector(".page.active");
+
+        if (currentPageElement) {
+          currentPageElement.classList.remove("active");
+        }
+        const newPageElement = document.getElementById(pageName + "-page");
+        newPageElement.classList.add("active", "animate-fade-in");
+        setTimeout(() => {
+          newPageElement.classList.remove("animate-fade-in");
+        }, 600);
+
+        if (pageName === "listings") {
+          renderCategories();
+          currentCategory = null;
+          showCategoriesView();
+        } else if (pageName === "hkugac") {
+          renderHKUGACLinks();
+        }
+      }
+
+      function renderCategories() {
+        const container = document.getElementById("categories-view");
+        container.innerHTML = linkStacks
+          .map(
+            (stack, index) => `
+        <button class="category-button" onclick="showCategory('${
+          stack.category
+        }')" style="animation-delay: ${index * 30}ms;">
+          <div class="category-title">
+            ${stack.category}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </div>
+          <div class="category-count">${stack.links.length} links</div>
+        </button>
+      `
+          )
+          .join("");
+      }
+
+      function showCategory(categoryName) {
+        const categoriesView = document.getElementById("categories-view");
+        categoriesView.classList.add("blur-out");
+
+        setTimeout(() => {
+          categoriesView.classList.remove("blur-out");
+          currentCategory = categoryName;
+          const stack = linkStacks.find((s) => s.category === categoryName);
+          document.getElementById("category-title").textContent = categoryName;
+          const linksGrid = document.getElementById("links-grid");
+          linksGrid.innerHTML = stack.links
+            .map(
+              (link, index) => `
+          <a href="${
+            link.url
+          }" target="_blank" rel="noopener noreferrer" class="link-card animate-fade-in" style="animation-delay: ${
+                index * 30
+              }ms;">
+            <h3 class="link-title">${link.title}</h3>
+            <svg class="external-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4m-4-6l6-6m0 0H9m7 0v7"/>
+            </svg>
+          </a>
+        `
+            )
+            .join("");
+          categoriesView.style.display = "none";
+          document.getElementById("links-view").style.display = "block";
+          document.getElementById("links-view").classList.add("blur-in");
+          setTimeout(() => {
+            document.getElementById("links-view").classList.remove("blur-in");
+          }, 230);
+        }, 230);
+      }
+
+      function showCategoriesView() {
+        const linksView = document.getElementById("links-view");
+        linksView.classList.add("blur-in");
+
+        setTimeout(() => {
+          linksView.classList.remove("blur-in");
+          linksView.style.display = "none";
+          const categoriesView = document.getElementById("categories-view");
+          categoriesView.style.display = "grid";
+          currentCategory = null;
+        }, 230);
+      }
+
+      function renderHKUGACLinks() {
+        const container = document.getElementById("hkugac-grid");
+        container.innerHTML = hkugacLinks
+          .map(
+            (link, index) => `
+        <a href="${
+          link.url
+        }" target="_blank" rel="noopener noreferrer" class="hkugac-link animate-fade-in" style="animation-delay: ${
+              index * 50
+            }ms;">
+          <h2>${link.name}</h2>
+          <p>Click to visit →</p>
+        </a>
+      `
+          )
+          .join("");
+      }
+
+      // Initialize with home page
+      showPage("home");
+    </script>
   </body>
 </html>

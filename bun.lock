@@ -1,0 +1,13 @@
+{
+  "lockfileVersion": 1,
+  "workspaces": {
+    "": {
+      "dependencies": {
+        "@vercel/edge": "^0.1.2",
+      },
+    },
+  },
+  "packages": {
+    "@vercel/edge": ["@vercel/edge@0.1.2", "", {}, "sha512-NmoJ4JvF2/LxU8e8fRJcxaMrO9A8a2WmW6CO9GEomlDltlREyQTUWMk13BuCDDpXUPcSBDrZ2TJIoWiFQEI4sg=="],
+  }
+}
