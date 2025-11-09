@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Linkist - Public Listings</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        background: #000;
+        color: #fff;
+        font-family: "Inter", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        overflow: hidden;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 0.05;
+        }
+        50% {
+          opacity: 0.1;
+        }
+      }
+
+      @keyframes blurOut {
+        0% {
+          opacity: 1;
+          filter: blur(0px);
+        }
+        100% {
+          opacity: 1;
+          filter: blur(8px);
+        }
+      }
+
+      @keyframes blurIn {
+        0% {
+          opacity: 1;
+          filter: blur(8px);
+        }
+        100% {
+          opacity: 1;
+          filter: blur(0px);
+        }
+      }
+
+      .animate-fade-in {
+        animation: fadeIn 0.6s ease-out forwards;
+      }
+      .blur-out {
+        animation: blurOut 0.23s ease-out forwards;
+      }
+      .blur-in {
+        animation: blurIn 0.23s ease-out forwards;
+      }
+
+      .bg-blob {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(80px);
+        z-index: -1;
+      }
+
+      .blob-1 {
+        width: 384px;
+        height: 384px;
+        background: rgba(255, 255, 255, 0.05);
+        top: 25%;
+        left: 25%;
+        animation: pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+
+      .blob-2 {
+        width: 320px;
+        height: 320px;
+        background: rgba(255, 255, 255, 0.05);
+        bottom: 33%;
+        right: 25%;
+        animation: pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        animation-delay: 2s;
+      }
+
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+        display: flex;
+        align-items: left;
+        justify-content: space-between;
+        padding: 20px 32px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(10px);
+      }
+
+      .logo {
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 18px;
+        cursor: pointer;
+        transition: opacity 0.3s;
+      }
+
+      .logo:hover {
+        opacity: 0.7;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 24px;
+        align-items: left;
+      }
+
+      .nav-links a {
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        font-size: 14px;
+        transition: color 0.2s;
+      }
+
+      .nav-links a:hover {
+        color: #fff;
+      }
+
+      main {
+        width: 100%;
+        height: 100vh;
+        overflow-y: auto;
+        padding: 100px 24px 48px;
+      }
+
+      .listings-container {
+        max-width: 80rem;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .listings-container h1 {
+        font-size: 48px;
+        font-weight: 300;
+        letter-spacing: -0.02em;
+        margin-bottom: 64px;
+        text-wrap: balance;
+        animation: fadeIn 1s ease-out;
+      }
+
+      .categories-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 16px;
+        margin-bottom: 64px;
+      }
+
+      .category-button {
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        padding: 24px;
+        background: transparent;
+        color: #fff;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-align: left;
+        font-size: 16px;
+      }
+
+      .category-button:hover {
+        background: rgba(255, 255, 255, 0.03);
+        border-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .category-title {
+        font-size: 18px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.9);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .category-count {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.5);
+        margin-top: 8px;
+      }
+
+      #links-view {
+        display: none;
+      }
+
+      .links-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 16px;
+      }
+
+      .link-card {
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        padding: 24px;
+        background: transparent;
+        color: #fff;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+      }
+
+      .link-card:hover {
+        background: rgba(255, 255, 255, 0.03);
+        border-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .link-title {
+        font-size: 18px;
+        font-weight: 500;
+      }
+
+      .back-button {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.5);
+        background: none;
+        border: none;
+        cursor: pointer;
+        margin-bottom: 32px;
+        transition: color 0.2s;
+      }
+
+      .back-button:hover {
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      @media (max-width: 768px) {
+        .categories-grid {
+          grid-template-columns: 1fr;
+        }
+        .links-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg-blob blob-1"></div>
+    <div class="bg-blob blob-2"></div>
+
+    <header>
+      <a class="logo" href="index.html"><h2>Linkist</h2></a>
+      <div
+        class="nav-links"
+        style="display: flex; gap: 24px; align-items: center"
+      >
+        <a
+          href="index.html"
+          style="
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+          "
+          >Home</a
+        >
+        <a
+          href="public-listings.html"
+          style="
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+          "
+          >Listings</a
+        >
+        <a
+          href="dashboard.html"
+          style="
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+          "
+          >Dashboard</a
+        >
+        <a
+          href="temp/hkugac.html"
+          style="
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+          "
+          >HKUGAC</a
+        >
+      </div>
+    </header>
+
+    <main>
+      <div class="listings-container">
+        <h1>Link Collections</h1>
+        <div id="categories-view" class="categories-grid"></div>
+        <div id="links-view">
+          <button class="back-button" onclick="showCategories()">← Back</button>
+          <h1 id="category-title" style="margin-bottom: 32px"></h1>
+          <div class="links-grid" id="links-grid"></div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      const linkStacks = [
+        {
+          category: "HKUGAC",
+          links: [
+            { id: 1, title: "Main website", url: "https://www.hkugac.edu.hk/" },
+            {
+              id: 2,
+              title: "Library OPAC",
+              url: "http://lib.hkugac.edu.hk/Pages/Index.aspx",
+            },
+            { id: 3, title: "Newsela", url: "https://newsela.com/" },
+            {
+              id: 4,
+              title: "Britannica",
+              url: "https://school.eb.com.au/levels",
+            },
+            {
+              id: 5,
+              title: "Hong Kong Public Library",
+              url: "https://mmis.hkpl.gov.hk/",
+            },
+            { id: 6, title: "HyRead", url: "https://hkugac.hyread.hk/" },
+            {
+              id: 6,
+              title: "eClass",
+              url: "https://eclass.hkugac.edu.hk/home/index.php",
+            },
+            {
+              id: 7,
+              title: "Daily Bulletin",
+              url: "https://sites.google.com/hkugac.edu.hk/dailybulletin/%E9%A6%96%E9%A0%81",
+            },
+            {
+              id: 8,
+              title: "UGA Revision",
+              url: "https://ugarev.netlify.app/",
+            },
+            { id: 9, title: "Noteflight", url: "https://www.noteflight.com/" },
+            {
+              id: 10,
+              title: "Fireflies Chinese",
+              url: "https://fireflies.chiculture.org.hk/",
+            },
+          ],
+        },
+      ];
+
+      function renderCategories() {
+        const container = document.getElementById("categories-view");
+        container.innerHTML = linkStacks
+          .map(
+            (stack, index) => `
+        <button class="category-button" onclick="showCategory('${
+          stack.category
+        }')" style="animation-delay: ${index * 30}ms;">
+          <div class="category-title">
+            ${stack.category}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </div>
+          <div class="category-count">${stack.links.length} links</div>
+        </button>
+      `
+          )
+          .join("");
+      }
+
+      function showCategory(categoryName) {
+        const categoriesView = document.getElementById("categories-view");
+        categoriesView.classList.add("blur-out");
+
+        setTimeout(() => {
+          categoriesView.classList.remove("blur-out");
+          const stack = linkStacks.find((s) => s.category === categoryName);
+          document.getElementById("category-title").textContent = categoryName;
+          const linksGrid = document.getElementById("links-grid");
+          linksGrid.innerHTML = stack.links
+            .map(
+              (link, index) => `
+          <a href="${
+            link.url
+          }" target="_blank" rel="noopener noreferrer" class="link-card animate-fade-in" style="animation-delay: ${
+                index * 30
+              }ms;">
+            <h3 class="link-title">${link.title}</h3>
+            <svg class="external-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4m-4-6l6-6m0 0H9m7 0v7"/>
+            </svg>
+          </a>
+        `
+            )
+            .join("");
+          categoriesView.style.display = "none";
+          document.getElementById("links-view").style.display = "block";
+          document.getElementById("links-view").classList.add("blur-in");
+          setTimeout(() => {
+            document.getElementById("links-view").classList.remove("blur-in");
+          }, 230);
+        }, 230);
+      }
+
+      function showCategories() {
+        const linksView = document.getElementById("links-view");
+        linksView.classList.add("blur-in");
+
+        setTimeout(() => {
+          linksView.classList.remove("blur-in");
+          linksView.style.display = "none";
+          document.getElementById("categories-view").style.display = "grid";
+        }, 230);
+      }
+
+      renderCategories();
+    </script>
+  </body>
+</html>

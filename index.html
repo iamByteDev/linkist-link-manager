@@ -3,15 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Linkist - All your favourite links in one place</title>
-    <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
+    <title>Linkist - All your favourite links, all in one place</title>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
       rel="stylesheet"
     />
-    <script>
-      let title = "Linkist - All your favourite links, all in one place";
-    </script>
     <style>
       * {
         margin: 0;
@@ -28,7 +25,7 @@
         font-family: "Inter", sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        overflow: hidden;
+        overflow-y: auto;
       }
 
       /* Animations */
@@ -146,6 +143,17 @@
         opacity: 0.7;
       }
 
+      .nav-links a {
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        font-size: 14px;
+        transition: color 0.2s;
+      }
+
+      .nav-links a:hover {
+        color: rgba(255, 255, 255, 0.9);
+      }
+
       /* Main containers */
       main {
         width: 100%;
@@ -164,8 +172,9 @@
         min-height: 100vh;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         padding-top: 64px;
+        overflow-y: auto;
       }
 
       .hero-section {
@@ -314,10 +323,6 @@
         transition: all 0.2s;
         text-align: left;
         font-size: 16px;
-      }
-    img {
-      width: 3.5rem;
-      height: 3.5rem;
       }
 
       .category-button:hover {
@@ -523,8 +528,53 @@
     <div class="bg-blob blob-2"></div>
 
     <!-- Header -->
-    <header class="logo"  onclick="showPage('home'), document.title = `Linkist`">
-      <img id="image" src="/images/logo.png"><h2>&nbsp&nbspLinkist<h2></img>
+    <header>
+      <a class="logo" href="index.html"><h2>Linkist &nbsp&nbsp</h2></a>
+      <div
+        class="nav-links"
+        style="display: flex; gap: 24px; align-items: center"
+      >
+        <a
+          href="index.html"
+          style="
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+          "
+          >Home</a
+        >
+        <a
+          href="public-listings.html"
+          style="
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+          "
+          >Listings</a
+        >
+        <a
+          href="dashboard.html"
+          style="
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+          "
+          >Dashboard</a
+        >
+        <a
+          href="temp/hkugac.html"
+          style="
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+          "
+          >HKUGAC</a
+        >
+      </div>
     </header>
 
     <!-- Home Page -->
@@ -535,11 +585,18 @@
           Streamline your digital presence. Curate, organize, and share your
           most important links with elegance.
         </p>
-        <button
-          class="cta-button"
-          onclick="showPage('listings'), document.title = `Public Listings` "
-        >
-          View Public Listings
+        <script>
+          function viewPublic() {
+            document.location.href = "/public-listings.html";
+          }
+        </script>
+        <button class="cta-button" onclick="viewPublic()">
+          <a
+            href="/public-listings.html"
+            style="text-decoration: none; color: #000"
+            target="_blank"
+            >View Public Listings</a
+          >
           <svg
             width="20"
             height="20"
@@ -598,13 +655,9 @@
             <!-- Categories will be generated here -->
           </div>
           <div id="links-view" style="display: none">
-            <button
-              class="back-button"
-              onclick="showCategoriesView(), document.title = `Public Listings`"
-            >
+            <button class="back-button" onclick="showCategoriesView()">
               ← Back
             </button>
-            <div>Uploaded by Admin</div>
             <h1 id="category-title" style="margin-bottom: 32px"></h1>
             <div class="links-grid" id="links-grid">
               <!-- Links will be generated here -->
@@ -622,14 +675,6 @@
         <div class="hkugac-grid" id="hkugac-grid">
           <!-- Links will be generated here -->
         </div>
-        <div class="instructions">
-          <h3>How to add more links:</h3>
-          <p>
-            To add more links, duplicate any link object in the
-            <code>hkugacLinks</code> array and update the <code>name</code> and
-            <code>url</code> properties. Simple copy & paste!
-          </p>
-        </div>
       </div>
     </main>
 
@@ -637,42 +682,60 @@
       // Data
       const linkStacks = [
         {
-          category: "HKUGAC",
+          category: "Development",
           links: [
-            { id: 1, title: "Main website", url: "https://www.hkugac.edu.hk/" },
+            { id: 1, title: "GitHub", url: "https://github.com" },
+            { id: 2, title: "GitLab", url: "https://gitlab.com" },
+            { id: 3, title: "Bitbucket", url: "https://bitbucket.org" },
+          ],
+        },
+        {
+          category: "Deployment",
+          links: [
+            { id: 4, title: "Vercel", url: "https://vercel.com" },
+            { id: 5, title: "Netlify", url: "https://netlify.com" },
+            { id: 6, title: "Railway", url: "https://railway.app" },
+          ],
+        },
+        {
+          category: "Framework",
+          links: [
+            { id: 7, title: "Next.js", url: "https://nextjs.org" },
+            { id: 8, title: "React", url: "https://react.dev" },
+            { id: 9, title: "Vue.js", url: "https://vuejs.org" },
+            { id: 10, title: "Svelte", url: "https://svelte.dev" },
+          ],
+        },
+        {
+          category: "Styling & Design",
+          links: [
+            { id: 11, title: "Tailwind CSS", url: "https://tailwindcss.com" },
+            { id: 12, title: "Shadcn/ui", url: "https://ui.shadcn.com" },
+            { id: 13, title: "Figma", url: "https://figma.com" },
+          ],
+        },
+        {
+          category: "AI & Tools",
+          links: [
+            { id: 14, title: "v0", url: "https://v0.app" },
+            { id: 15, title: "ChatGPT", url: "https://chatgpt.com" },
+            { id: 16, title: "Claude", url: "https://claude.ai" },
+          ],
+        },
+        {
+          category: "Learning",
+          links: [
             {
-              id: 2,
-              title: "Library OPAC",
-              url: "http://lib.hkugac.edu.hk/Pages/Index.aspx",
-            },
-            { id: 3, title: "Newsela", url: "https://newsela.com/" },
-            {
-              id: 4,
-              title: "Britannica",
-              url: "https://school.eb.com.au/levels",
+              id: 17,
+              title: "MDN Web Docs",
+              url: "https://developer.mozilla.org",
             },
             {
-              id: 5,
-              title: "Hong Kong Public Library",
-              url: "https://mmis.hkpl.gov.hk/",
+              id: 18,
+              title: "TypeScript",
+              url: "https://www.typescriptlang.org",
             },
-            { id: 6, title: "HyRead", url: "https://hkugac.hyread.hk/" },
-            {
-              id: 6,
-              title: "eClass",
-              url: "https://eclass.hkugac.edu.hk/home/index.php",
-            },
-            {
-              id: 7,
-              title: "Daily Bulletin",
-              url: "https://sites.google.com/hkugac.edu.hk/dailybulletin/%E9%A6%96%E9%A0%81",
-            },
-            {
-              id: 8,
-              title: "UGA Revision",
-              url: "https://ugarev.netlify.app/",
-            },
-            { id: 9, title: "Noteflight", url: "https://www.noteflight.com/" },
+            { id: 19, title: "Web.dev", url: "https://web.dev" },
           ],
         },
       ];
@@ -769,10 +832,10 @@
 
       function showCategoriesView() {
         const linksView = document.getElementById("links-view");
-        linksView.classList.add("blur-out");
+        linksView.classList.add("blur-in");
 
         setTimeout(() => {
-          linksView.classList.remove("blur-out");
+          linksView.classList.remove("blur-in");
           linksView.style.display = "none";
           const categoriesView = document.getElementById("categories-view");
           categoriesView.style.display = "grid";

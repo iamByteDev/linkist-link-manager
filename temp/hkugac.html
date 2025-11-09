@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
+    <title>Linkist - HKUGAC Directory</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 100%;
+        background: #000;
+        color: #fff;
+        font-family: "Inter", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 0.05;
+        }
+        50% {
+          opacity: 0.1;
+        }
+      }
+
+      .animate-fade-in {
+        animation: fadeIn 0.6s ease-out forwards;
+      }
+
+      .bg-blob {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(80px);
+        z-index: -1;
+      }
+
+      .blob-1 {
+        width: 384px;
+        height: 384px;
+        background: rgba(255, 255, 255, 0.05);
+        top: 25%;
+        left: 25%;
+        animation: pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+
+      .blob-2 {
+        width: 320px;
+        height: 320px;
+        background: rgba(255, 255, 255, 0.05);
+        bottom: 33%;
+        right: 25%;
+        animation: pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        animation-delay: 2s;
+      }
+
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px 32px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(10px);
+      }
+
+      .logo {
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 18px;
+        cursor: pointer;
+        transition: opacity 0.3s;
+      }
+
+      .logo:hover {
+        opacity: 0.7;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 24px;
+        align-items: left;
+      }
+
+      .nav-links a {
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        font-size: 14px;
+        transition: color 0.2s;
+      }
+
+      .nav-links a:hover {
+        color: #fff;
+      }
+
+      main {
+        width: 100%;
+        min-height: 100vh;
+        padding: 128px 24px 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .hkugac-container {
+        max-width: 56rem;
+        width: 100%;
+        margin: 0 auto;
+      }
+
+      .hkugac-container h1 {
+        font-size: 40px;
+        font-weight: 700;
+        margin-bottom: 16px;
+        text-align: center;
+        animation: fadeIn 1s ease-out;
+      }
+
+      .hkugac-container p {
+        text-align: center;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 48px;
+      }
+
+      .hkugac-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 24px;
+        margin-bottom: 64px;
+      }
+
+      .hkugac-link {
+        display: block;
+        padding: 32px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        text-decoration: none;
+        color: #fff;
+        transition: all 0.3s;
+        cursor: pointer;
+      }
+
+      .hkugac-link:hover {
+        border-color: rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .hkugac-link h2 {
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 12px;
+        text-wrap: balance;
+      }
+
+      .hkugac-link p {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.5);
+        text-align: left;
+      }
+
+      .instructions {
+        padding: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .instructions h3 {
+        font-weight: 600;
+        margin-bottom: 12px;
+      }
+
+      .instructions p {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      code {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: "Courier New", monospace;
+      }
+
+      @media (max-width: 768px) {
+        .hkugac-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg-blob blob-1"></div>
+    <div class="bg-blob blob-2"></div>
+
+    <header>
+      <a class="logo" href="../index.html"><h2>Linkist</h2></a>
+      <div class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="../public-listings.html">Listings</a>
+        <a href="../dashboard.html">Dashboard</a>
+        <a href="hkugac.html">HKUGAC</a>
+      </div>
+    </header>
+
+    <main>
+      <div class="hkugac-container">
+        <h1>HKUGAC Directory</h1>
+        <p>All your HKUGAC links in one place</p>
+        <div class="hkugac-grid" id="hkugac-grid"></div>
+        <!--<div class="instructions">
+          <h3>How to add more links:</h3>
+          <p>
+            To add more links, duplicate any link object in the
+            <code>hkugacLinks</code> array and update the <code>name</code> and
+            <code>url</code> properties.
+          </p>
+        </div> -->
+      </div>
+    </main>
+
+    <script>
+      const hkugacLinks = [
+        { id: 1, name: "Main website", url: "https://www.hkugac.edu.hk/" },
+        {
+          id: 2,
+          name: "Library OPAC",
+          url: "http://lib.hkugac.edu.hk/Pages/Index.aspx",
+        },
+        { id: 3, name: "Newsela", url: "https://newsela.com/" },
+        { id: 4, name: "Britannica", url: "https://school.eb.com.au/levels" },
+        {
+          id: 5,
+          name: "Hong Kong Public Library",
+          url: "https://mmis.hkpl.gov.hk/",
+        },
+        { id: 6, name: "HyRead", url: "https://hkugac.hyread.hk/" },
+        {
+          id: 7,
+          name: "eClass",
+          url: "https://eclass.hkugac.edu.hk/home/index.php",
+        },
+        {
+          id: 8,
+          name: "Daily Bulletin",
+          url: "https://sites.google.com/hkugac.edu.hk/dailybulletin/",
+        },
+        { id: 9, name: "UGA Revision", url: "https://ugarev.netlify.app/" },
+        { id: 10, name: "Noteflight", url: "https://www.noteflight.com/" },
+      ];
+
+      function renderHKUGACLinks() {
+        const container = document.getElementById("hkugac-grid");
+        container.innerHTML = hkugacLinks
+          .map(
+            (link, index) => `
+        <a href="${
+          link.url
+        }" target="_blank" rel="noopener noreferrer" class="hkugac-link animate-fade-in" style="animation-delay: ${
+              index * 50
+            }ms;">
+          <h2>${link.name}</h2>
+          <p>Click to visit →</p>
+        </a>
+      `
+          )
+          .join("");
+      }
+
+      renderHKUGACLinks();
+    </script>
+  </body>
+</html>
